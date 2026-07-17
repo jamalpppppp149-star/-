@@ -130,18 +130,15 @@
             transform: scale(1.02);
         }
 
-        /* مساحة إعلانية واحدة ثابتة وغير مزعجة */
+        /* حاوية الإعلان العلوي المخصصة لـ A-Ads */
         .ad-space {
-            background-color: #1e293b;
-            border: 1px dashed #475569;
-            padding: 15px;
+            background-color: transparent;
+            padding: 0;
             text-align: center;
-            color: var(--text-muted);
-            border-radius: 10px;
-            font-size: 13px;
             margin-bottom: 20px;
             width: 100%;
             box-sizing: border-box;
+            overflow: hidden;
         }
     </style>
 </head>
@@ -153,9 +150,13 @@
             <p style="color: var(--text-muted); margin: 0;">اكتشف كيف تتعامل مع المال في 5 أسئلة سريعة</p>
         </header>
 
-        <!-- الإعلان العلوي الثابت والمقبول للمستخدمين -->
+        <!-- الإعلان العلوي الثابت من شركة A-Ads (وحدة رقم 2448272) -->
         <div class="ad-space">
-            [ مساحة بنر إعلاني علوي هادئ - Adsterra Native Banner ]
+            <!-- BEGIN AADS AD UNIT 2448272 -->
+            <div id="frame" style="width: 100%; margin: auto; position: relative; z-index: 99998;">
+                <iframe data-aa="2448272" src="//acceptable.a-ads.com/2448272?size=Adaptive" style="border:0; padding:0; width:100%; height:auto; overflow:hidden; display:block; margin:auto;"></iframe>
+            </div>
+            <!-- END AADS AD UNIT 2448272 -->
         </div>
 
         <!-- صندوق الاختبار الديناميكي -->
@@ -200,7 +201,7 @@
                 options: ["مخاطرة كبيرة وأفضل الاحتفاظ بمالي في البنك", "فرصة ممتازة لزيادة الدخل وأحب تجربة ذلك بمبالغ مدروسة", "لا أملك فكرة كافية عنها وأفضل إنفاق المال في الحاضر"]
             },
             {
-                q: "عندما تقع في أزمة مالية مفاجئة قبل نهاية الشهر، كيف تتصرف؟",
+                q: "عندما تقع في أزمة مالية مفاجئة قبل نهاية الشهر، كيف تتصرف？",
                 options: ["أعتمد على بطاقات الائتمان أو الاقتراض من الأصدقاء", "لدي دائماً صندوق طوارئ مخصص لهذه المواقف", "أقوم بتقليص مصاريفي اليومية فوراً ليتناسب المتبقي مع الأيام"]
             },
             {
@@ -224,6 +225,7 @@
             if (currentIdx >= quizData.length) {
                 // الانتقال لصفحة النتيجة بعد السؤال الأخير
                 quizSection.style.display = 'none';
+                resultSection.style.with = 'block';
                 resultSection.style.display = 'block';
                 return;
             }
@@ -250,10 +252,10 @@
             });
         }
 
-        // تفعيل زر النتيجة لفتح الإعلان المربح
+        // تفعيل زر النتيجة لفتح إعلان Adsterra المنبثق
         showResultBtn.addEventListener('click', () => {
-            // 1. فتح الإعلان المنبثق في علامة تبويب جديدة لتربح منه (Pop-under)
-            // ملاحظة: استبدل الرابط أدناه برابط الـ Popunder الخاص بك من Adsterra لاحقاً
+            // 1. فتح إعلان الـ Popunder الخاص بك في علامة تبويب جديدة لتربح منه
+            // بمجرد جلب رابط الـ Direct Link الخاص بك من Adsterra ضع الرابط بدلاً من جوجل بالأسفل
             window.open('https://www.google.com', '_blank'); 
 
             // 2. إظهار النتيجة الفعلية للزائر داخل الموقع بعد نقر الزر
@@ -266,4 +268,3 @@
     </script>
 </body>
 </html>
-
