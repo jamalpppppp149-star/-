@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار الذكاء المالي | اعرف نمطك الشخصي</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #f59e0b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            color: var(--accent);
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid #334155;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: #334155;
+            border-radius: 3px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--accent);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: #334155;
+            color: var(--text);
+            border: 2px solid transparent;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+            text-align: right;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            background-color: #475569;
+            border-color: var(--accent);
+        }
+
+        .result-box {
+            display: none;
+            text-align: center;
+        }
+
+        .result-title {
+            font-size: 24px;
+            color: var(--success);
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .btn-main {
+            background-color: var(--accent);
+            color: #000;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+
+        .btn-main:hover {
+            transform: scale(1.02);
+        }
+
+        /* مساحة إعلانية واحدة ثابتة وغير مزعجة */
+        .ad-space {
+            background-color: #1e293b;
+            border: 1px dashed #475569;
+            padding: 15px;
+            text-align: center;
+            color: var(--text-muted);
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>💡 اختبار الثقافة والذكاء المالي</h1>
+            <p style="color: var(--text-muted); margin: 0;">اكتشف كيف تتعامل مع المال في 5 أسئلة سريعة</p>
+        </header>
+
+        <!-- الإعلان العلوي الثابت والمقبول للمستخدمين -->
+        <div class="ad-space">
+            [ مساحة بنر إعلاني علوي هادئ - Adsterra Native Banner ]
+        </div>
+
+        <!-- صندوق الاختبار الديناميكي -->
+        <div class="card">
+            <div id="quiz-section">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress"></div>
+                </div>
+                <div class="question-text" id="question">جاري تحميل السؤال الأول...</div>
+                <div class="options-list" id="options">
+                    <!-- الأزرار ستظهر هنا برمجياً -->
+                </div>
+            </div>
+
+            <!-- صندوق النتيجة النهائي المخفي -->
+            <div class="result-box" id="result-section">
+                <div class="result-title">🎉 اكتمل الاختبار بنجاح!</div>
+                <p style="margin-bottom: 25px; line-height: 1.6; color: var(--text-muted);">
+                    قمنا بتحليل إجاباتك المالية بدقة وجاهزون لعرض نمط شخصيتك وتوجيه النصيحة الاستثمارية المناسبة لك مجاناً.
+                </p>
+                <button class="btn-main" id="showResultBtn">اضغط هنا لإظهار النتيجة فوراً</button>
+                <div id="actual-result" style="display:none; margin-top:20px; font-size:18px; color: var(--accent); font-weight:bold;">
+                    تحليلك المالي: أنت شخص "مستثمر متزن" توازن بين الادخار والمخاطرة المدروسة، استمر في تطوير أصولك!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // بيانات الأسئلة والإجابات
+        const quizData = [
+            {
+                q: "إذا حصلت فجأة على مكافأة مالية غير متوقعة، ماذا تفعل بها أولاً؟",
+                options: ["أشتري بها شيئاً كنت أتمناه فوراً", "أقوم بادخارها بالكامل للحالات الطارئة", "أستثمر جزءاً منها وأستمتع بالباقي"]
+            },
+            {
+                q: "كيف تصف طريقتك المعتادة في التسوق الشهري؟",
+                options: ["أشتري ما أحتاجه وما يعجبني بدون خطة مسبقة", "لدي ميزانية صارمة ومكتوبة وألتزم بها تماماً", "أبحث دائماً عن العروض والخصومات لتقليل المصاريف"]
+            },
+            {
+                q: "ما هو رأيك الشخصي في فكرة الاستثمار في البورصة أو الأصول؟",
+                options: ["مخاطرة كبيرة وأفضل الاحتفاظ بمالي في البنك", "فرصة ممتازة لزيادة الدخل وأحب تجربة ذلك بمبالغ مدروسة", "لا أملك فكرة كافية عنها وأفضل إنفاق المال في الحاضر"]
+            },
+            {
+                q: "عندما تقع في أزمة مالية مفاجئة قبل نهاية الشهر، كيف تتصرف؟",
+                options: ["أعتمد على بطاقات الائتمان أو الاقتراض من الأصدقاء", "لدي دائماً صندوق طوارئ مخصص لهذه المواقف", "أقوم بتقليص مصاريفي اليومية فوراً ليتناسب المتبقي مع الأيام"]
+            },
+            {
+                q: "ما هو هدفك المالي الأكبر خلال السنوات الخمس القادمة؟",
+                options: ["الوصول إلى الحرية المالية وبناء مصادر دخل متعددة", "تأمين وظيفة مستقرة براتب أعلى فقط", "شراء سيارة أو منزل جديد والاستمتاع بالحياة"]
+            }
+        ];
+
+        let currentIdx = 0;
+
+        const questionEl = document.getElementById('question');
+        const optionsContainer = document.getElementById('options');
+        const progressFill = document.getElementById('progress');
+        const quizSection = document.getElementById('quiz-section');
+        const resultSection = document.getElementById('result-section');
+        const showResultBtn = document.getElementById('showResultBtn');
+        const actualResult = document.getElementById('actual-result');
+
+        // دالة تشغيل وعرض السؤال الحالي
+        function loadQuestion() {
+            if (currentIdx >= quizData.length) {
+                // الانتقال لصفحة النتيجة بعد السؤال الأخير
+                quizSection.style.display = 'none';
+                resultSection.style.display = 'block';
+                return;
+            }
+
+            // تحديث شريط التقدم العلوي
+            const progressPercent = (currentIdx / quizData.length) * 100;
+            progressFill.style.width = `${progressPercent}%`;
+
+            // عرض نص السؤال
+            const currentQuestion = quizData[currentIdx];
+            questionEl.innerText = `${currentIdx + 1}. ${currentQuestion.q}`;
+
+            // تفريغ وعرض الاختيارات الجديدة
+            optionsContainer.innerHTML = '';
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.innerText = option;
+                button.addEventListener('click', () => {
+                    currentIdx++;
+                    loadQuestion(); // الانتقال التلقائي للسؤال التالي بسلاسة
+                });
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // تفعيل زر النتيجة لفتح الإعلان المربح
+        showResultBtn.addEventListener('click', () => {
+            // 1. فتح الإعلان المنبثق في علامة تبويب جديدة لتربح منه (Pop-under)
+            // ملاحظة: استبدل الرابط أدناه برابط الـ Popunder الخاص بك من Adsterra لاحقاً
+            window.open('https://www.google.com', '_blank'); 
+
+            // 2. إظهار النتيجة الفعلية للزائر داخل الموقع بعد نقر الزر
+            showResultBtn.style.display = 'none';
+            actualResult.style.display = 'block';
+        });
+
+        // تشغيل الاختبار لأول مرة
+        loadQuestion();
+    </script>
+</body>
+</html>
+
