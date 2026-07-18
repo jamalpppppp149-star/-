@@ -3,56 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اختبار الذكاء المالي | اعرف نمطك الشخصي</title>
+    <title>اختبار الثقافة والذكاء المالي</title>
     <style>
         :root {
-            --bg: #0f172a;
+            --bg-color: #0f172a;
             --card-bg: #1e293b;
-            --accent: #f59e0b;
-            --text: #f8fafc;
+            --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --success: #10b981;
+            --accent: #38bdf8;
+            --accent-hover: #0284c7;
+            --correct: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 20px;
         }
 
         .container {
             width: 100%;
             max-width: 600px;
-            padding: 20px;
-            box-sizing: border-box;
+            margin-top: 20px;
         }
 
-        header {
-            text-align: center;
+        .ad-container {
+            width: 100%;
+            max-width: 600px;
             margin-bottom: 20px;
-        }
-
-        header h1 {
-            color: var(--accent);
-            font-size: 24px;
-            margin-bottom: 8px;
+            display: flex;
+            justify-content: center;
         }
 
         .card {
             background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            border: 1px solid #334155;
-            min-height: 250px;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text-main);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            text-align: right;
+        }
+
+        .options-list {
+            list-style: none;
             display: flex;
             flex-direction: column;
+            gap: 15px;
+        }
+
+        .option-btn {
+            width: 100%;
+            background-color: #273549;
+            color: var(--text-main);
+            border: 1px solid #334155;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: right;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover {
+            background-color: #334155;
+            border-color: var(--accent);
+        }
+
+        .option-btn.selected {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: #000;
+            font-weight: bold;
+        }
+
+        .result-screen {
+            display: none;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid var(--accent);
+            display: flex;
+            align-items: center;
             justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 25px;
+            color: var(--accent);
+        }
+
+        .restart-btn {
+            background-color: var(--accent);
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.2s;
+        }
+
+        .restart-btn:hover {
+            background-color: var(--accent-hover);
         }
 
         .progress-bar {
@@ -60,7 +145,7 @@
             height: 6px;
             background-color: #334155;
             border-radius: 3px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             overflow: hidden;
         }
 
@@ -70,201 +155,124 @@
             width: 0%;
             transition: width 0.3s ease;
         }
-
-        .question-text {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .option-btn {
-            background-color: #334155;
-            color: var(--text);
-            border: 2px solid transparent;
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 16px;
-            text-align: right;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .option-btn:hover {
-            background-color: #475569;
-            border-color: var(--accent);
-        }
-
-        .result-box {
-            display: none;
-            text-align: center;
-        }
-
-        .result-title {
-            font-size: 24px;
-            color: var(--success);
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .btn-main {
-            background-color: var(--accent);
-            color: #000;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s;
-            width: 100%;
-        }
-
-        .btn-main:hover {
-            transform: scale(1.02);
-        }
-
-        /* حاوية الإعلان العلوي المخصصة لـ A-Ads */
-        .ad-space {
-            background-color: transparent;
-            padding: 0;
-            text-align: center;
-            margin-bottom: 20px;
-            width: 100%;
-            box-sizing: border-box;
-            overflow: hidden;
-        }
     </style>
 </head>
 <body>
 
+    <!-- 1. مساحة الإعلانات العلوية -->
+    <div class="ad-container">
+        <!-- ضع كود إعلان A-Ads الخاص بك كاملاً هنا بدلاً من السطر التالي -->
+        <iframe data-aa="2448272" src="//acceptable.a-ads.com/2448272?size=Adaptive" style="border:0; padding:0; width:100%; height:auto; overflow:hidden; display:block; margin:auto;"></iframe>
+    </div>
+
     <div class="container">
-        <header>
+        <!-- شاشة الاختبار الرئيسي -->
+        <div id="quiz-card" class="card">
             <h1>💡 اختبار الثقافة والذكاء المالي</h1>
-            <p style="color: var(--text-muted); margin: 0;">اكتشف كيف تتعامل مع المال في 5 أسئلة سريعة</p>
-        </header>
-
-        <!-- الإعلان العلوي الثابت من شركة A-Ads (وحدة رقم 2448272) -->
-        <div class="ad-space">
-            <!-- BEGIN AADS AD UNIT 2448272 -->
-            <div id="frame" style="width: 100%; margin: auto; position: relative; z-index: 99998;">
-                <iframe data-aa="2448272" src="//acceptable.a-ads.com/2448272?size=Adaptive" style="border:0; padding:0; width:100%; height:auto; overflow:hidden; display:block; margin:auto;"></iframe>
+            <p id="quiz-subtitle" class="subtitle">اكتشف كيف تتعامل مع المال في 5 أسئلة عشوائية سريعة</p>
+            
+            <div class="progress-bar">
+                <div id="progress" class="progress-fill"></div>
             </div>
-            <!-- END AADS AD UNIT 2448272 -->
-        </div>
 
-        <!-- صندوق الاختبار الديناميكي -->
-        <div class="card">
-            <div id="quiz-section">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress"></div>
-                </div>
-                <div class="question-text" id="question">جاري تحميل السؤال الأول...</div>
-                <div class="options-list" id="options">
+            <div id="question-box">
+                <p id="question-text" class="question-text">جاري تحميل السؤال...</p>
+                <div id="options-container" class="options-list">
                     <!-- الأزرار ستظهر هنا برمجياً -->
                 </div>
             </div>
+        </div>
 
-            <!-- صندوق النتيجة النهائي المخفي -->
-            <div class="result-box" id="result-section">
-                <div class="result-title">🎉 اكتمل الاختبار بنجاح!</div>
-                <p style="margin-bottom: 25px; line-height: 1.6; color: var(--text-muted);">
-                    قمنا بتحليل إجاباتك المالية بدقة وجاهزون لعرض نمط شخصيتك وتوجيه النصيحة الاستثمارية المناسبة لك مجاناً.
-                </p>
-                <button class="btn-main" id="showResultBtn">اضغط هنا لإظهار النتيجة فوراً</button>
-                <div id="actual-result" style="display:none; margin-top:20px; font-size:18px; color: var(--accent); font-weight:bold;">
-                    تحليلك المالي: أنت شخص "مستثمر متزن" توازن بين الادخار والمخاطرة المدروسة، استمر في تطوير أصولك!
-                </div>
-            </div>
+        <!-- شاشة النتيجة النهائية -->
+        <div id="result-card" class="card result-screen">
+            <h1>📊 نتيجتك النهائية</h1>
+            <p class="subtitle">تم تحليل إجاباتك المالية بنجاح</p>
+            <div id="score-display" class="score-circle">0/5</div>
+            <p id="feedback-text" style="line-height: 1.6; margin-bottom: 20px;"></p>
+            <button class="restart-btn" onclick="startQuiz()">إعادة الاختبار بأسئلة جديدة 🔄</button>
         </div>
     </div>
 
+    <!-- ⚠️ ربط الملفات البرمجية بالترتيب الصحيح (مهم جداً) -->
+    <script src="questions.js"></script>
+
     <script>
-        // بيانات الأسئلة والإجابات
-        const quizData = [
-            {
-                q: "إذا حصلت فجأة على مكافأة مالية غير متوقعة، ماذا تفعل بها أولاً؟",
-                options: ["أشتري بها شيئاً كنت أتمناه فوراً", "أقوم بادخارها بالكامل للحالات الطارئة", "أستثمر جزءاً منها وأستمتع بالباقي"]
-            },
-            {
-                q: "كيف تصف طريقتك المعتادة في التسوق الشهري؟",
-                options: ["أشتري ما أحتاجه وما يعجبني بدون خطة مسبقة", "لدي ميزانية صارمة ومكتوبة وألتزم بها تماماً", "أبحث دائماً عن العروض والخصومات لتقليل المصاريف"]
-            },
-            {
-                q: "ما هو رأيك الشخصي في فكرة الاستثمار في البورصة أو الأصول؟",
-                options: ["مخاطرة كبيرة وأفضل الاحتفاظ بمالي في البنك", "فرصة ممتازة لزيادة الدخل وأحب تجربة ذلك بمبالغ مدروسة", "لا أملك فكرة كافية عنها وأفضل إنفاق المال في الحاضر"]
-            },
-            {
-                q: "عندما تقع في أزمة مالية مفاجئة قبل نهاية الشهر، كيف تتصرف？",
-                options: ["أعتمد على بطاقات الائتمان أو الاقتراض من الأصدقاء", "لدي دائماً صندوق طوارئ مخصص لهذه المواقف", "أقوم بتقليص مصاريفي اليومية فوراً ليتناسب المتبقي مع الأيام"]
-            },
-            {
-                q: "ما هو هدفك المالي الأكبر خلال السنوات الخمس القادمة؟",
-                options: ["الوصول إلى الحرية المالية وبناء مصادر دخل متعددة", "تأمين وظيفة مستقرة براتب أعلى فقط", "شراء سيارة أو منزل جديد والاستمتاع بالحياة"]
-            }
-        ];
+        // الأكواد البرمجية لتشغيل الـ 5 أسئلة العشوائية والتحكم بالموقع
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
 
-        let currentIdx = 0;
+        function startQuiz() {
+            // جلب 5 أسئلة عشوائية من الملف الأول questions.js
+            currentQuestions = getRandomQuestions(5); 
+            currentQuestionIndex = 0;
+            score = 0;
+            
+            document.getElementById('result-card').style.display = 'none';
+            document.getElementById('quiz-card').style.display = 'block';
+            showQuestion();
+        }
 
-        const questionEl = document.getElementById('question');
-        const optionsContainer = document.getElementById('options');
-        const progressFill = document.getElementById('progress');
-        const quizSection = document.getElementById('quiz-section');
-        const resultSection = document.getElementById('result-section');
-        const showResultBtn = document.getElementById('showResultBtn');
-        const actualResult = document.getElementById('actual-result');
-
-        // دالة تشغيل وعرض السؤال الحالي
-        function loadQuestion() {
-            if (currentIdx >= quizData.length) {
-                // الانتقال لصفحة النتيجة بعد السؤال الأخير
-                quizSection.style.display = 'none';
-                resultSection.style.with = 'block';
-                resultSection.style.display = 'block';
+        function showQuestion() {
+            if (currentQuestionIndex >= currentQuestions.length) {
+                showResults();
                 return;
             }
 
-            // تحديث شريط التقدم العلوي
-            const progressPercent = (currentIdx / quizData.length) * 100;
-            progressFill.style.width = `${progressPercent}%`;
+            // تحديث شريط التقدم
+            const progressPercent = (currentQuestionIndex / currentQuestions.length) * 100;
+            document.getElementById('progress').style.width = `${progressPercent}%`;
 
-            // عرض نص السؤال
-            const currentQuestion = quizData[currentIdx];
-            questionEl.innerText = `${currentIdx + 1}. ${currentQuestion.q}`;
-
-            // تفريغ وعرض الاختيارات الجديدة
+            const q = currentQuestions[currentQuestionIndex];
+            document.getElementById('question-text').innerText = `${currentQuestionIndex + 1}. ${q.question}`;
+            
+            const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
-            currentQuestion.options.forEach(option => {
-                const button = document.createElement('button');
-                button.className = 'option-btn';
-                button.innerText = option;
-                button.addEventListener('click', () => {
-                    currentIdx++;
-                    loadQuestion(); // الانتقال التلقائي للسؤال التالي بسلاسة
-                });
-                optionsContainer.appendChild(button);
+
+            q.options.forEach((option) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = option;
+                btn.onclick = () => handleAnswer();
+                optionsContainer.appendChild(btn);
             });
         }
 
-        // تفعيل زر النتيجة لفتح إعلان Adsterra المنبثق
-        showResultBtn.addEventListener('click', () => {
-            // 1. فتح إعلان الـ Popunder الخاص بك في علامة تبويب جديدة لتربح منه
-            // بمجرد جلب رابط الـ Direct Link الخاص بك من Adsterra ضع الرابط بدلاً من جوجل بالأسفل
-            window.open('https://www.google.com', '_blank'); 
+        function handleAnswer() {
+            // حساب النقاط عشوائياً كتجربة تفاعلية
+            const randomPoints = Math.floor(Math.random() * 2); // 0 أو 1
+            score += randomPoints;
 
-            // 2. إظهار النتيجة الفعلية للزائر داخل الموقع بعد نقر الزر
-            showResultBtn.style.display = 'none';
-            actualResult.style.display = 'block';
-        });
+            currentQuestionIndex++;
+            setTimeout(showQuestion, 300); // الانتقال للسؤال التالي بسلاسة بعد 300 جزء من الثانية
+        }
 
-        // تشغيل الاختبار لأول مرة
-        loadQuestion();
+        function showResults() {
+            document.getElementById('progress').style.width = '100%';
+            document.getElementById('quiz-card').style.display = 'none';
+            document.getElementById('result-card').style.display = 'block';
+            
+            document.getElementById('score-display').innerText = `${score}/5`;
+            
+            let feedback = "";
+            if (score >= 4) {
+                feedback = "ممتاز! لديك عقلية استثمارية واعية وتعرف كيف تدير وتنمي أموالك بحكمة لتأمين مستقبلك.";
+            } else if (score >= 2) {
+                feedback = "جيد متوازن! أنت تحاول الموازنة بين متعة الحاضر وأمان المستقبل، لكنك تحتاج لترتيب ميزانيتك أكثر.";
+            } else {
+                feedback = "تحتاج إلى مراجعة! إنفاقك عاطفي ومندفع قليلاً، من الأفضل البدء بتعلم أسس الادخار وبناء صندوق طوارئ.";
+            }
+            document.getElementById('feedback-text').innerText = feedback;
+        }
+
+        // تشغيل الاختبار تلقائياً بمجرد فتح الصفحة
+        window.onload = () => {
+            if (typeof getRandomQuestions === 'function') {
+                startQuiz();
+            } else {
+                document.getElementById('question-text').innerText = "خطأ: لم يتم العثور على ملف الأسئلة questions.js!";
+            }
+        };
     </script>
 </body>
 </html>
