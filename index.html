@@ -98,13 +98,6 @@
             border-color: var(--accent);
         }
 
-        .option-btn.selected {
-            background-color: var(--accent);
-            border-color: var(--accent);
-            color: #000;
-            font-weight: bold;
-        }
-
         .result-screen {
             display: none;
         }
@@ -159,9 +152,8 @@
 </head>
 <body>
 
-    <!-- 1. مساحة الإعلانات العلوية -->
+    <!-- 1. مساحة الإعلانات العلوية الثابتة -->
     <div class="ad-container">
-        <!-- ضع كود إعلان A-Ads الخاص بك كاملاً هنا بدلاً من السطر التالي -->
         <iframe data-aa="2448272" src="//acceptable.a-ads.com/2448272?size=Adaptive" style="border:0; padding:0; width:100%; height:auto; overflow:hidden; display:block; margin:auto;"></iframe>
     </div>
 
@@ -178,7 +170,7 @@
             <div id="question-box">
                 <p id="question-text" class="question-text">جاري تحميل السؤال...</p>
                 <div id="options-container" class="options-list">
-                    <!-- الأزرار ستظهر هنا برمجياً -->
+                    <!-- الأزرار تظهر هنا برمجياً -->
                 </div>
             </div>
         </div>
@@ -187,26 +179,26 @@
         <div id="result-card" class="card result-screen">
             <h1>📊 نتيجتك النهائية</h1>
             <p class="subtitle">تم تحليل إجاباتك المالية بنجاح</p>
-            <div id="score-display" class="score-circle">0/5</div>
+            <div id="score-display" class="score-circle">0/10</div>
             <p id="feedback-text" style="line-height: 1.6; margin-bottom: 20px;"></p>
             <button class="restart-btn" onclick="startQuiz()">إعادة الاختبار بأسئلة جديدة 🔄</button>
         </div>
     </div>
 
-    <!-- ⚠️ ربط الملفات البرمجية بالترتيب الصحيح (مهم جداً) -->
+    <!-- ربط ملف الأسئلة الخارجي -->
     <script src="questions.js"></script>
 
     <script>
-        // الأكواد البرمجية لتشغيل الـ 5 أسئلة العشوائية والتحكم بالموقع
         let currentQuestions = [];
         let currentQuestionIndex = 0;
         let score = 0;
+        let adOpened = false; // متغير للتأكد من فتح الإعلان لمرة واحدة فقط لمنع إزعاج الزائر
 
         function startQuiz() {
-            // جلب 5 أسئلة عشوائية من الملف الأول questions.js
             currentQuestions = getRandomQuestions(5); 
             currentQuestionIndex = 0;
             score = 0;
+            adOpened = false; // إعادة تهيئة الإعلان عند بدء اختبار جديد
             
             document.getElementById('result-card').style.display = 'none';
             document.getElementById('quiz-card').style.display = 'block';
@@ -219,7 +211,6 @@
                 return;
             }
 
-            // تحديث شريط التقدم
             const progressPercent = (currentQuestionIndex / currentQuestions.length) * 100;
             document.getElementById('progress').style.width = `${progressPercent}%`;
 
@@ -229,22 +220,30 @@
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
 
-            q.options.forEach((option) => {
+            // تعديل ذكي ليمرر ترتيب الزر (0 أو 1 أو 2) لاحتساب النتيجة بدقة
+            q.options.forEach((option, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
                 btn.innerText = option;
-                btn.onclick = () => handleAnswer();
+                btn.onclick = () => handleAnswer(index);
                 optionsContainer.appendChild(btn);
             });
         }
 
-        function handleAnswer() {
-            // حساب النقاط عشوائياً كتجربة تفاعلية
-            const randomPoints = Math.floor(Math.random() * 2); // 0 أو 1
-            score += randomPoints;
+        function handleAnswer(selectedIndex) {
+            // 🚀 ميزة الإعلان الإجباري المنبثق:
+            // يفتح الإعلان في صفحة منفصلة عند أول ضغطة يقوم بها الزائر لحفظ التفاعل
+            if (!adOpened) {
+                // ضع رابط صفحة إعلانك الجديد أو نفس الرابط المباشر هنا بدلاً من الرابط التجريبي أدناه
+                window.open('https://acceptable.a-ads.com/2448272', '_blank');
+                adOpened = true; 
+            }
+
+            // احتساب النقاط الحقيقية: الخيار الثالث = نقطتان، الثاني = نقطة واحدة، الأول = 0 نقاط
+            score += selectedIndex;
 
             currentQuestionIndex++;
-            setTimeout(showQuestion, 300); // الانتقال للسؤال التالي بسلاسة بعد 300 جزء من الثانية
+            setTimeout(showQuestion, 300);
         }
 
         function showResults() {
@@ -252,20 +251,20 @@
             document.getElementById('quiz-card').style.display = 'none';
             document.getElementById('result-card').style.display = 'block';
             
-            document.getElementById('score-display').innerText = `${score}/5`;
+            // أعلى نتيجة ممكنة هي 10 نقاط (5 أسئلة × نقطتين كحد أقصى)
+            document.getElementById('score-display').innerText = `${score}/10`;
             
             let feedback = "";
-            if (score >= 4) {
-                feedback = "ممتاز! لديك عقلية استثمارية واعية وتعرف كيف تدير وتنمي أموالك بحكمة لتأمين مستقبلك.";
-            } else if (score >= 2) {
-                feedback = "جيد متوازن! أنت تحاول الموازنة بين متعة الحاضر وأمان المستقبل، لكنك تحتاج لترتيب ميزانيتك أكثر.";
+            if (score >= 8) {
+                feedback = "ممتاز! لديك عقلية استثمارية واعية وتعرف كيف تدير وتنمي أموالك بحكمة لتأمين مستقبلك المالي.";
+            } else if (score >= 4) {
+                feedback = "جيد ومتوازن! أنت تحاول الموازنة بين متعة الحاضر وأمان المستقبل، لكنك تحتاج لترتيب ميزانيتك بذكاء أكبر.";
             } else {
-                feedback = "تحتاج إلى مراجعة! إنفاقك عاطفي ومندفع قليلاً، من الأفضل البدء بتعلم أسس الادخار وبناء صندوق طوارئ.";
+                feedback = "تحتاج إلى مراجعة! إنفاقك عاطفي ومندفع قليلاً، من الأفضل البدء بتعلم أسس الادخار وبناء صندوق طوارئ متين.";
             }
             document.getElementById('feedback-text').innerText = feedback;
         }
 
-        // تشغيل الاختبار تلقائياً بمجرد فتح الصفحة
         window.onload = () => {
             if (typeof getRandomQuestions === 'function') {
                 startQuiz();
@@ -276,4 +275,3 @@
     </script>
 </body>
 </html>
-
